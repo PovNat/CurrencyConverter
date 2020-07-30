@@ -5,10 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,5 +55,17 @@ public class Parser {
             e.printStackTrace();
         }
         return "Successfully updated";
+    }
+
+    public String getLastDate() throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/JavaServer", "postgres", "310193");
+        Statement statement =connection.createStatement();
+        String sql = " select distinct actual_date from actual_information" +
+                "        order by actual_date desc limit 1";
+        ResultSet reset = statement.executeQuery(sql);
+        String res = null;
+        if (reset.next()) {
+             res = reset.getString(1);}
+        return res;
     }
 }
